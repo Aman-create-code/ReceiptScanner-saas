@@ -3,223 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReceiptScanner SaaS | Dashboard</title>
+    <title>ScanFlow Pro | Enterprise Micro-SaaS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .glass-effect { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        :root { --primary: #4f46e5; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .toast { animation: slideIn 0.3s ease-out forwards; }
+        @keyframes slideIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .loading-bar { width: 0%; height: 4px; background: var(--primary); transition: width 1.5s ease-in-out; position: absolute; top: 0; left: 0; }
+        .row-new { animation: highlight 2s ease-out; }
+        @keyframes highlight { from { background-color: #f5f3ff; } to { background-color: transparent; } }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-[#f8fafc] text-slate-900">
 
-    <aside class="fixed left-0 top-0 h-screen w-64 bg-white border-r border-slate-200 hidden md:flex flex-col">
-        <div class="p-6">
-            <div class="flex items-center gap-2 text-indigo-600 font-bold text-2xl">
-                <i data-lucide="zap"></i>
-                <span>ScanFlow</span>
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <aside class="fixed left-0 top-0 h-screen w-72 bg-white border-r border-slate-200 hidden xl:flex flex-col z-30">
+        <div class="p-8">
+            <div class="flex items-center gap-3 text-indigo-600 font-extrabold text-2xl tracking-tight">
+                <div class="bg-indigo-600 text-white p-1.5 rounded-lg"><i data-lucide="layers" class="w-6 h-6"></i></div>
+                <span>ScanFlow<span class="text-slate-400 font-light">.io</span></span>
             </div>
         </div>
-        
-        <nav class="flex-1 px-4 space-y-2">
-            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-indigo-50 text-indigo-700 rounded-lg font-medium">
-                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
-            </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-lg transition">
-                <i data-lucide="file-text" class="w-5 h-5"></i> Dokumente
-            </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-lg transition">
-                <i data-lucide="bar-chart-3" class="w-5 h-5"></i> Berichte
-            </a>
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-lg transition">
-                <i data-lucide="users" class="w-5 h-5"></i> Team
-            </a>
+        <nav class="flex-1 px-6 space-y-1">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 px-4">Menu</p>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-indigo-50 text-indigo-700 rounded-xl font-semibold"><i data-lucide="layout-grid" class="w-5 h-5"></i> Dashboard</a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl transition-all"><i data-lucide="folder-open" class="w-5 h-5"></i> Dokumente</a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl transition-all"><i data-lucide="bar-chart-3" class="w-5 h-5"></i> Analysen</a>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-8 mb-4 px-4">System</p>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl transition-all"><i data-lucide="settings-2" class="w-5 h-5"></i> Einstellungen</a>
         </nav>
-
-        <div class="p-4 border-t border-slate-200">
-            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-lg transition">
-                <i data-lucide="settings" class="w-5 h-5"></i> Einstellungen
-            </a>
-            <div class="mt-4 p-4 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl text-white">
-                <p class="text-xs font-semibold uppercase opacity-80">Pro Plan</p>
-                <p class="text-sm mt-1">Sichere dir 50GB extra Speicher!</p>
-                <button class="mt-3 w-full py-2 bg-white text-indigo-600 rounded-lg text-xs font-bold shadow-sm">Upgrade</button>
-            </div>
+        <div class="p-6 border-t border-slate-100 text-center">
+            <p class="text-xs text-slate-400 mb-2">Build v1.0.4-beta</p>
         </div>
     </aside>
 
-    <main class="md:ml-64 min-h-screen">
-        <header class="h-16 border-b border-slate-200 bg-white/50 backdrop-blur-md sticky top-0 z-10 flex items-center justify-between px-8">
-            <div class="flex items-center gap-4 bg-slate-100 px-4 py-2 rounded-full w-96 border border-slate-200">
-                <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
-                <input type="text" placeholder="Suche nach Belegen..." class="bg-transparent border-none focus:outline-none text-sm w-full">
-            </div>
-            
+    <main class="xl:ml-72 min-h-screen">
+        <header class="h-20 bg-white border-b border-slate-200 sticky top-0 z-20 px-8 flex items-center justify-between">
+            <h1 class="text-xl font-bold text-slate-800">Finanz-Dashboard</h1>
             <div class="flex items-center gap-4">
-                <button class="relative p-2 text-slate-500 hover:bg-slate-100 rounded-full">
-                    <i data-lucide="bell" class="w-5 h-5"></i>
-                    <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-                </button>
-                <div class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold border border-indigo-200">
-                    JD
+                <div class="flex items-center gap-3 bg-slate-100 border px-4 py-2 rounded-xl">
+                    <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
+                    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Suchen..." class="bg-transparent outline-none text-sm w-48">
                 </div>
             </div>
         </header>
 
-        <div class="p-8 max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="file-up"></i></div>
-                        <span class="text-green-500 text-sm font-medium">+12%</span>
-                    </div>
-                    <h3 class="text-slate-500 text-sm font-medium">Scans diesen Monat</h3>
-                    <p class="text-2xl font-bold mt-1">1.284</p>
+        <div class="p-8 max-w-7xl mx-auto space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <p class="text-slate-500 text-sm font-medium">Gesamt-Ausgaben</p>
+                    <p id="totalAmountDisplay" class="text-3xl font-black text-slate-800 mt-1">0,00 €</p>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i data-lucide="dollar-sign"></i></div>
-                        <span class="text-green-500 text-sm font-medium">+5%</span>
-                    </div>
-                    <h3 class="text-slate-500 text-sm font-medium">Erfasste Ausgaben</h3>
-                    <p class="text-2xl font-bold mt-1">14.502,30 €</p>
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <p class="text-slate-500 text-sm font-medium">Belege diesen Monat</p>
+                    <p id="receiptCountDisplay" class="text-3xl font-black text-slate-800 mt-1">0</p>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="p-2 bg-amber-50 text-amber-600 rounded-lg"><i data-lucide="clock"></i></div>
-                        <span class="text-slate-400 text-sm font-medium">0%</span>
-                    </div>
-                    <h3 class="text-slate-500 text-sm font-medium">Gesparte Zeit</h3>
-                    <p class="text-2xl font-bold mt-1">24h 15m</p>
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <p class="text-slate-500 text-sm font-medium">Steuer-Schätzung</p>
+                    <p id="taxDisplay" class="text-3xl font-black text-indigo-600 mt-1">0,00 €</p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
-                <section>
-                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
-                        <i data-lucide="plus-circle" class="text-indigo-600"></i> Neuer Beleg
-                    </h2>
-                    <div class="border-2 border-dashed border-slate-300 bg-white rounded-2xl p-12 text-center hover:border-indigo-400 transition-colors cursor-pointer group">
-                        <div class="mx-auto w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-indigo-50 transition">
-                            <i data-lucide="upload-cloud" class="w-8 h-8 text-slate-400 group-hover:text-indigo-500"></i>
-                        </div>
-                        <h3 class="font-semibold text-slate-800">Dateien hochladen</h3>
-                        <p class="text-sm text-slate-500 mt-1">PDF, JPG oder PNG bis zu 10MB</p>
-                        <button class="mt-6 px-6 py-2 bg-slate-900 text-white rounded-lg font-medium hover:bg-slate-800 transition">Datei auswählen</button>
+            <div id="drop-zone" onclick="document.getElementById('fileInput').click()" class="relative overflow-hidden bg-white border-2 border-dashed border-slate-300 rounded-[2rem] p-12 text-center hover:border-indigo-400 transition-all cursor-pointer">
+                <div id="upload-bar" class="loading-bar"></div>
+                <i data-lucide="upload-cloud" class="w-12 h-12 text-indigo-600 mx-auto mb-4"></i>
+                <h2 class="text-xl font-bold">Klicken oder Datei ziehen</h2>
+                <p class="text-slate-500 text-sm mt-2">Exportieren Sie Ihre Belege jederzeit als CSV</p>
+                <input type="file" id="fileInput" class="hidden" multiple onchange="processFiles(this.files)">
+            </div>
+
+            <div class="bg-white rounded-[2rem] border border-slate-200 overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                    <div>
+                        <h3 class="font-bold text-slate-800">Transaktionsverlauf</h3>
+                        <p class="text-xs text-slate-400">Alle Daten werden lokal in diesem Demo-Modus verarbeitet</p>
                     </div>
-
-                    <div class="mt-8">
-                        <h2 class="text-lg font-bold mb-4">Letzte Scans</h2>
-                        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                            <table class="w-full text-left border-collapse">
-                                <thead class="bg-slate-50 text-slate-500 text-xs uppercase font-semibold">
-                                    <tr>
-                                        <th class="px-6 py-4">Dokument</th>
-                                        <th class="px-6 py-4">Datum</th>
-                                        <th class="px-6 py-4">Betrag</th>
-                                        <th class="px-6 py-4 text-right">Aktion</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-100">
-                                    <tr class="hover:bg-slate-50 transition">
-                                        <td class="px-6 py-4 font-medium flex items-center gap-2">
-                                            <i data-lucide="file" class="w-4 h-4 text-blue-500"></i> Amazon_Rec_102.pdf
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-slate-500">Vor 2 Std.</td>
-                                        <td class="px-6 py-4 text-sm font-semibold text-slate-800">89,90 €</td>
-                                        <td class="px-6 py-4 text-right">
-                                            <button class="p-1 hover:text-indigo-600"><i data-lucide="more-horizontal" class="w-5 h-5"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr class="hover:bg-slate-50 transition">
-                                        <td class="px-6 py-4 font-medium flex items-center gap-2">
-                                            <i data-lucide="file" class="w-4 h-4 text-blue-500"></i> Starbucks_Coffee.jpg
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-slate-500">Gestern</td>
-                                        <td class="px-6 py-4 text-sm font-semibold text-slate-800">12,50 €</td>
-                                        <td class="px-6 py-4 text-right">
-                                            <button class="p-1 hover:text-indigo-600"><i data-lucide="more-horizontal" class="w-5 h-5"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="flex gap-2">
+                        <button onclick="exportData()" class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition flex items-center gap-2 shadow-lg shadow-indigo-100">
+                            <i data-lucide="download" class="w-4 h-4"></i> Alle exportieren (.CSV)
+                        </button>
                     </div>
-                </section>
-
-                <section>
-                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
-                        <i data-lucide="sliders" class="text-indigo-600"></i> Systemeinstellungen
-                    </h2>
-                    <div class="bg-white rounded-2xl border border-slate-200 p-6 space-y-6">
-                        
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="font-semibold text-slate-800 text-sm">Automatische Texterkennung (OCR)</p>
-                                <p class="text-xs text-slate-500">Extrahiert Daten sofort nach dem Upload.</p>
-                            </div>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" checked class="sr-only peer">
-                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                            </label>
-                        </div>
-
-                        <div>
-                            <p class="font-semibold text-slate-800 text-sm mb-3">Export-Format</p>
-                            <div class="grid grid-cols-3 gap-2">
-                                <button class="py-2 border-2 border-indigo-600 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold">CSV</button>
-                                <button class="py-2 border-2 border-slate-100 hover:border-slate-200 rounded-lg text-xs font-bold text-slate-600">JSON</button>
-                                <button class="py-2 border-2 border-slate-100 hover:border-slate-200 rounded-lg text-xs font-bold text-slate-600">Excel</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-800 mb-2">Standardwährung</label>
-                            <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                                <option>Euro (€)</option>
-                                <option>US Dollar ($)</option>
-                                <option>Swiss Franc (CHF)</option>
-                            </select>
-                        </div>
-
-                        <hr class="border-slate-100">
-
-                        <div>
-                            <p class="font-semibold text-red-600 text-sm mb-3">Gefahrenzone</p>
-                            <button class="w-full py-2 bg-red-50 text-red-600 border border-red-100 rounded-lg text-xs font-bold hover:bg-red-100 transition">Alle Daten unwiderruflich löschen</button>
-                        </div>
-
-                    </div>
-
-                    <div class="mt-8">
-                        <h2 class="text-lg font-bold mb-4">Integrationen</h2>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-3">
-                                <div class="w-10 h-10 bg-slate-100 rounded flex items-center justify-center font-bold text-xs">LEX</div>
-                                <div>
-                                    <p class="text-xs font-bold">LexOffice</p>
-                                    <p class="text-[10px] text-green-500 font-medium">Verbunden</p>
-                                </div>
-                            </div>
-                            <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-3 grayscale opacity-60">
-                                <div class="w-10 h-10 bg-slate-100 rounded flex items-center justify-center font-bold text-xs">DATEV</div>
-                                <div>
-                                    <p class="text-xs font-bold">DATEV</p>
-                                    <p class="text-[10px] text-slate-400 font-medium">Nicht aktiv</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left" id="mainTable">
+                        <thead class="bg-slate-50 text-slate-400 text-[10px] uppercase font-black tracking-widest">
+                            <tr>
+                                <th class="px-8 py-4">Datum</th>
+                                <th class="px-8 py-4">Händler</th>
+                                <th class="px-8 py-4">Kategorie</th>
+                                <th class="px-8 py-4 text-right">Betrag</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100" id="tableBody">
+                            </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
 
     <script>
-        // Icons initialisieren
-        lucide.createIcons();
+        // Initial Data
+        let receipts = [
+            { id: 1, date: '2023-10-24', merchant: 'Apple Store', category: 'Hardware', amount: 1249.00 },
+            { id: 2, date: '2023-10-25', merchant: 'AWS Cloud', category: 'Software', amount: 42.12 },
+            { id: 3, date: '2023-10-26', merchant: 'Starbucks', category: 'Verpflegung', amount: 7.50 }
+        ];
+
+        // Init App
+        window.onload = () => {
+            renderTable();
+            lucide.createIcons();
+        };
+
+        // UI Notification
+        function notify(msg, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 border border-slate-700 min-w-[280px]`;
+            toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'info'}" class="w-5 h-5 text-indigo-400"></i> <span class="text-sm font-bold">${msg}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 500); }, 3000);
+        }
+
+        // Table Rendering
+        function renderTable() {
+            const body = document.getElementById('tableBody');
+            body.innerHTML = '';
+            let total = 0;
+
+            receipts.forEach(r => {
+                total += r.amount;
+                const row = `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-8 py-5 text-sm text-slate-500">${r.date}</td>
+                        <td class="px-8 py-5 font-bold text-slate-700">${r.merchant}</td>
+                        <td class="px-8 py-5"><span class="px-3 py-1 bg-slate-100 rounded-full text-[10px] font-bold text-slate-500 uppercase">${r.category}</span></td>
+                        <td class="px-8 py-5 font-black text-slate-900 text-right">${r.amount.toLocaleString('de-DE', {style: 'currency', currency: 'EUR'})}</td>
+                    </tr>
+                `;
+                body.insertAdjacentHTML('beforeend', row);
+            });
+
+            // Update Stats
+            document.getElementById('totalAmountDisplay').innerText = total.toLocaleString('de-DE', {style: 'currency', currency: 'EUR'});
+            document.getElementById('receiptCountDisplay').innerText = receipts.length;
+            document.getElementById('taxDisplay').innerText = (total * 0.19).toLocaleString('de-DE', {style: 'currency', currency: 'EUR'});
+        }
+
+        // Process Upload (Simulation)
+        function processFiles(files) {
+            const bar = document.getElementById('upload-bar');
+            bar.style.width = '100%';
+            notify("KI analysiert Belege...");
+
+            setTimeout(() => {
+                const newReceipt = {
+                    id: Date.now(),
+                    date: new Date().toISOString().split('T')[0],
+                    merchant: files[0].name.split('.')[0],
+                    category: 'Unkategorisiert',
+                    amount: Math.random() * 100 + 5
+                };
+                receipts.unshift(newReceipt);
+                renderTable();
+                bar.style.width = '0%';
+                notify("Beleg erfolgreich hinzugefügt!");
+            }, 1500);
+        }
+
+        // --- DER EXPORT CORE ---
+        function exportData() {
+            if (receipts.length === 0) {
+                notify("Keine Daten zum Exportieren!", "info");
+                return;
+            }
+
+            // 1. CSV Header definieren
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "ID;Datum;Haendler;Kategorie;Betrag_EUR\n";
+
+            // 2. Datenzeilen hinzufügen
+            receipts.forEach(r => {
+                const row = `${r.id};${r.date};${r.merchant};${r.category};${r.amount.toFixed(2).replace('.', ',')}`;
+                csvContent += row + "\n";
+            });
+
+            // 3. Download-Link "faken" und klicken
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `ScanFlow_Export_${new Date().toLocaleDateString()}.csv`);
+            document.body.appendChild(link); // Required for FF
+
+            link.click();
+            document.body.removeChild(link);
+
+            notify("CSV-Datei wurde generiert!");
+        }
+
+        // Search Filter
+        function filterTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.getElementById('tableBody').getElementsByTagName('tr');
+            
+            for (let row of rows) {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(query) ? "" : "none";
+            }
+        }
     </script>
 </body>
 </html>
